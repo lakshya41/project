@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard - JobConnect</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <nav>
+    <ul>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="job-listings.html">Find Jobs</a></li>
+      <li><a href="post-job.html">Post a Job</a></li>
+      <li><a href="profile.html">My Profile</a></li>
+      <li><a href="#" onclick="logout()">Logout</a></li>
+    </ul>
+  </nav>
+
+  <main>
+    <h1>Welcome to Your Dashboard</h1>
+    <p id="roleDisplay">Loading...</p>
+
+    <section id="jobSeekerSection" style="display:none">
+      <h2>Applied Jobs</h2>
+      <p>You can track all your job applications here.</p>
+    </section>
+
+    <section id="employerSection" style="display:none">
+      <h2>Posted Jobs</h2>
+      <p>Manage your job postings and view applicants.</p>
+    </section>
+
+    <section id="adminSection" style="display:none">
+      <h2>Admin Panel</h2>
+      <p>Monitor user activities, job postings, and manage the platform.</p>
+    </section>
+  </main>
+
+  <script>
+    function logout() {
+      localStorage.removeItem('isLoggedIn');
+      localStorage.removeItem('userRole');
+      window.location.href = 'login.html';
+    }
+
+    const role = localStorage.getItem('userRole');
+    const isLoggedIn = localStorage.getItem('isLoggedIn');
+
+    if (!isLoggedIn) {
+      window.location.href = 'login.html';
+    } else {
+      document.getElementById('roleDisplay').innerText = `Logged in as: ${role}`;
+
+      if (role === 'jobseeker') {
+        document.getElementById('jobSeekerSection').style.display = 'block';
+      } else if (role === 'employer') {
+        document.getElementById('employerSection').style.display = 'block';
+      } else if (role === 'admin') {
+        document.getElementById('adminSection').style.display = 'block';
+      }
+    }
+  </script>
+</body>
+</html>

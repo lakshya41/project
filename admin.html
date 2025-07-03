@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Panel - JobConnect</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <nav>
+    <ul>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="dashboard.html">Dashboard</a></li>
+      <li><a href="#" onclick="logout()">Logout</a></li>
+    </ul>
+  </nav>
+
+  <main>
+    <h1>Admin Panel</h1>
+    <p id="adminStatus"></p>
+
+    <section>
+      <h2>All Job Posts</h2>
+      <ul id="jobList"></ul>
+    </section>
+
+    <section>
+      <h2>System Controls</h2>
+      <button onclick="clearAllJobs()">Clear All Job Posts</button>
+      <button onclick="clearAllProfiles()">Clear All User Profiles</button>
+    </section>
+  </main>
+
+  <script>
+    function logout() {
+      localStorage.removeItem('isLoggedIn');
+      localStorage.removeItem('userRole');
+      window.location.href = 'login.html';
+    }
+
+    const isLoggedIn = localStorage.getItem('isLoggedIn');
+    const role = localStorage.getItem('userRole');
+
+    if (!isLoggedIn || role !== 'admin') {
+      alert('Access denied. Admins only.');
+      window.location.href = 'login.html';
+    } else {
+      document.getElementById('adminStatus').innerText = 'Logged in as Admin';
+      loadJobs();
+    }
+
+    function loadJobs() {
+      const jobList = document.getElementById('jobList');
+      const jobs = JSON.parse(localStorage.getItem('jobs')) || [];
+
+      jobList.innerHTML = jobs.length === 0 ? '<li>No jobs posted yet.</li>' : '';
+
+      jobs.forEach((job, index) => {
+        const li = document.createElement('li');
+        li.textContent = `${job.title} at ${job.company} - ${job.location}`;
+        jobList.appendChild(li);
+      });
+    }
+
+    function clearAllJobs() {
+      if (confirm('Are you sure you want to delete all job posts?')) {
+        localStorage.removeItem('jobs');
+        loadJobs();
+        alert('All job posts have been deleted.');
+      }
+    }
+
+    function clearAllProfiles() {
+      if (confirm('Are you sure you want to delete all user profiles?')) {
+        localStorage.removeItem('userProfile');
+        alert('All user profiles have been deleted.');
+      }
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Applications - JobConnect</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <nav>
+    <ul>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="dashboard.html">Dashboard</a></li>
+      <li><a href="job-listings.html">Find Jobs</a></li>
+      <li><a href="profile.html">My Profile</a></li>
+      <li><a href="#" onclick="logout()">Logout</a></li>
+    </ul>
+  </nav>
+
+  <main>
+    <h1>My Applications</h1>
+    <ul id="appliedList" class="job-list"></ul>
+  </main>
+
+  <script>
+    function logout() {
+      localStorage.clear();
+      window.location.href = 'login.html';
+    }
+
+    const userEmail = localStorage.getItem("userEmail");
+    const appliedJobs = JSON.parse(localStorage.getItem("appliedJobs") || "[]");
+    const myJobs = appliedJobs.filter(job => job.user === userEmail);
+    const container = document.getElementById("appliedList");
+
+    if (myJobs.length === 0) {
+      container.innerHTML = "<li>No applications yet.</li>";
+    } else {
+      myJobs.forEach(job => {
+        const li = document.createElement("li");
+        li.classList.add("job-card");
+        li.innerHTML = `
+          <h3>${job.title}</h3>
+          <p><strong>Company:</strong> ${job.company}</p>
+          <p><strong>Applied On:</strong> ${new Date(job.appliedAt).toLocaleDateString()}</p>
+        `;
+        container.appendChild(li);
+      });
+    }
+  </script> 
+</body>
+</html>

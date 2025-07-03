@@ -1,0 +1,62 @@
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Find Jobs - JobConnect</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="jobs.js" defer></script>
+  <script src="utils.js" defer></script>
+</head>
+<body>
+  <nav>
+    <ul>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="dashboard.html">Dashboard</a></li>
+      <li><a href="profile.html">My Profile</a></li>
+      <li><a href="login.html" onclick="logout()">Logout</a></li>
+    </ul>
+  </nav>
+
+  <main>
+    <h1>Find Jobs</h1>
+
+    <!-- Filter Section -->
+    <section>
+      <form id="filterForm">
+        <input type="text" id="filterTitle" placeholder="Job Title">
+        <input type="text" id="filterLocation" placeholder="Location">
+        <input type="text" id="filterCompany" placeholder="Company">
+        <button type="submit">Search</button>
+      </form>
+    </section>
+
+    <!-- Job Listings Container -->
+    <section id="jobContainer"></section>
+  </main>
+
+  <script>
+    function logout() {
+      localStorage.removeItem('isLoggedIn');
+      localStorage.removeItem('userRole');
+      window.location.href = 'login.html';
+    }
+
+    // Display all jobs on page load
+    displayJobs("jobContainer");
+
+    // Filter form handler
+    document.getElementById("filterForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+      const title = document.getElementById("filterTitle").value;
+      const location = document.getElementById("filterLocation").value;
+      const company = document.getElementById("filterCompany").value;
+
+      displayJobs("jobContainer", {
+        title: title,
+        location: location,
+        company: company
+      });
+    });
+  </script>
+</body>
+</html>
